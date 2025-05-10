@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Buscador de Música</title>
+
+  <link rel="stylesheet" href="styles.css" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <style>
+    #audio-player {
+      display: none;
+      position: fixed;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      max-width: 800px;
+      background-color: #222;
+      padding: 12px;
+      border-top-left-radius: 12px;
+      border-top-right-radius: 12px;
+      box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.4);
+      z-index: 1000;
+    }
+  </style>
+</head>
+<body>
+
+  <header class="header">
+    <h1 class="logo">
+      <i class="fas fa-music"></i> Orion-X
+    </h1>
+  </header>
+
+  <div class="container">
+    <form id="search-form">
+  <div style="position: relative; display: inline-block; width: 100%;">
+    <input type="text" id="search-input" placeholder="Buscar canciones o artistas..." required style="width: 100%; padding-right: 40px;">
+    <button type="button" id="voice-btn" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none;">
+      <i class="fas fa-microphone" id="mic-icon"></i>
+    </button>
+  </div>
+  <button type="submit">Buscar</button>
+</form>
+
+    <div id="loading-message" style="display: none;">
+  <div class="loader">
+    <span></span><span></span><span></span><span></span><span></span><span></span>
+    <span></span><span></span><span></span><span></span><span></span><span></span>
+  </div>
+  <p id="loading-text">Buscando música...</p>
+</div>
+
+    <div class="music-list" id="music-list">
+      <!-- Aquí se insertarán las canciones -->
+    </div>
+  </div>
+
+  <audio id="audio-player" controls></audio>
+
+  <script src="api.js"></script>
+  <script>
+    function reproducirCancion(url) {
+      audioPlayer.src = url;
+      audioPlayer.style.display = "block";
+      audioPlayer.play();
+    }
+
+    audioPlayer.addEventListener("ended", () => {
+      audioPlayer.style.display = "none";
+    });
+
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('service-worker.js');
+}
+
+  const micIcon = document.getElementById('mic-icon');
+  const voiceBtn = document.getElementById('voice-btn');
+  let isRecording = false;
+  let reconocimiento;
+
+  voiceBtn.onclick = () => {
+    if (isRecording) {
+      reconocimiento.stop(); // detener si ya estaba grabando
+      return;
+    }
+
+    reconocimiento = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+    reconocimiento.lang = 'es-ES';
+    reconocimiento.interimResults = false;
+
+    reconocimiento.onstart = () => {
+      isRecording = true;
+      micIcon.classList.remove('fa-microphone');
+      micIcon.classList.add('fa-microphone-lines');
+    };
+
+    reconocimiento.onresult = (e) => {
+      const texto = e.results[0][0].transcript;
+      document.getElementById('search-input').value = texto;
+      document.getElementById('search-form').dispatchEvent(new Event('submit')); // dispara búsqueda
+    };
+
+    reconocimiento.onerror = (e) => {
+      alert("Error al reconocer la voz: " + e.error);
+    };
+
+    reconocimiento.onend = () => {
+      isRecording = false;
+      micIcon.classList.remove('fa-microphone-lines');
+      micIcon.classList.add('fa-microphone');
+    };
+
+    reconocimiento.start();
+  };
+
+    // ANIMACIÓN DE CARGA (puntos ...)
+    const loadingText = document.getElementById('loading-text');
+    let dotCount = 0;
+    setInterval(() => {
+      dotCount = (dotCount + 1) % 4; // 0, 1, 2, 3
+      let dots = '.'.repeat(dotCount);
+      loadingText.textContent = `Buscando música${dots}`;
+    }, 500);
+  </script>
+</body>
+</html>
