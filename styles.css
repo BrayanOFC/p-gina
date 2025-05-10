@@ -1,0 +1,142 @@
+/* Estilo general */
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #111;
+  color: #f0f0f0;
+}
+
+header.header {
+  background-color: #1c1c1c;
+  padding: 1rem;
+  text-align: center;
+  border-bottom: 1px solid #333;
+}
+
+h1.logo {
+  margin: 0;
+  font-size: 1.8rem;
+  color: #00ffcc;
+}
+
+.container {
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 1rem;
+}
+
+form#search-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+#search-input {
+  padding: 0.8rem 1rem;
+  border-radius: 8px;
+  border: 1px solid #444;
+  font-size: 1rem;
+  background-color: #222;
+  color: #fff;
+  outline: none;
+}
+
+#search-input::placeholder {
+  color: #aaa;
+}
+
+#voice-btn i {
+  color: #00ffcc;
+  font-size: 1.2rem;
+}
+
+#search-form button[type="submit"] {
+  padding: 0.8rem;
+  background-color: #00ffcc;
+  color: #000;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+#search-form button[type="submit"]:hover {
+  background-color: #00ccaa;
+}
+
+/* Lista de música */
+.music-list {
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* Reproductor */
+#audio-player {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: #1c1c1c;
+  padding: 1rem;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.4);
+  z-index: 1000;
+}
+
+/* Loader */
+.loader {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 1rem;
+}
+
+.loader span {
+  width: 6px;
+  height: 6px;
+  background: #00ffcc;
+  border-radius: 50%;
+  animation: bounce 1s infinite alternate;
+}
+
+.loader span:nth-child(odd) {
+  animation-delay: 0.2s;
+}
+
+@keyframes bounce {
+  0% {
+    transform: scale(1);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(1.8);
+    opacity: 1;
+  }
+}
+
+/* Texto de carga */
+#loading-text {
+  text-align: center;
+  color: #00ffcc;
+  font-size: 1rem;
+  margin-top: 0.5rem;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  h1.logo {
+    font-size: 1.5rem;
+  }
+
+  #search-form {
+    gap: 0.5rem;
+  }
+
+  #search-form button[type="submit"] {
+    font-size: 0.95rem;
+  }
+}
